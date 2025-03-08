@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE with Close Button</title>
+</head>
+
+<body>
+    <h1>Server-Sent Events Example</h1>
+    <div id="messages"></div>
+    <button id="closeBtn">Close SSE Connection</button>
+
+    <script>
+        const eventSource = new EventSource("http://localhost:3000/events");
+
+        eventSource.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            document.getElementById("messages").innerHTML += `<p>${message.message}</p>`;
+        };
+
+        eventSource.onerror = () => {
+            console.error("EventSource failed!");
+        };
+
+        document.getElementById("closeBtn").addEventListener("click", () => {
+            eventSource.close();
+            console.log("SSE connection closed from client.");
+            document.getElementById("messages").innerHTML += `<p><strong>Connection closed.</strong></p>`;
+        });
+    </script>
+</body>
+
+</html>
